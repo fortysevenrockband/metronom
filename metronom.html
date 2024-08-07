@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Metronome</title>
+</head>
+<body>
+    <audio id="metronome-click" src="https://www.soundjay.com/button/sounds/button-4.mp3"></audio>
+    <input type="number" id="bpm" value="120" readonly> BPM
+    <button onclick="startMetronome()">Start</button>
+    <button onclick="stopMetronome()">Stop</button>
+
+    <script>
+    var metronomeInterval;
+
+    function getBPMFromURL() {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get('bpm');
+    }
+
+    function startMetronome() {
+        var bpm = document.getElementById('bpm').value;
+        var interval = 60000 / bpm;
+        var audio = document.getElementById('metronome-click');
+        
+        metronomeInterval = setInterval(function() {
+            audio.play();
+        }, interval);
+    }
+
+    function stopMetronome() {
+        clearInterval(metronomeInterval);
+    }
+
+    function setBPM(bpm) {
+        document.getElementById('bpm').value = bpm;
+        if (metronomeInterval) {
+            stopMetronome();
+            startMetronome();
+        }
+    }
+
+    window.onload = function() {
+        var bpm = getBPMFromURL();
+        if (bpm) {
+            setBPM(bpm);
+        }
+    };
+    </script>
+</body>
+</html>
